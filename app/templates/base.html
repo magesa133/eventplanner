@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Planner - {% block title %}{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            transition: background 0.5s;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex space-x-7">
+                    <a href="{{ url_for('events.index') }}" class="flex items-center py-2 px-2">
+                        <span class="font-semibold text-gray-500 text-lg">Event Planner</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <select id="bgColor" class="py-2 px-4 border border-gray-300 rounded focus:outline-none">
+                        <option value="bg-gray-100">Select Background Color</option>
+                        <option value="bg-blue-100">Light Blue</option>
+                        <option value="bg-green-100">Light Green</option>
+                        <option value="bg-red-100">Light Red</option>
+                        <option value="bg-yellow-100">Light Yellow</option>
+                        <option value="bg-purple-100">Light Purple</option>
+                    </select>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('events.dashboard') }}" class="py-2 px-4 text-gray-500 hover:text-gray-700">Dashboard</a>
+                        <a href="{{ url_for('events.create_event') }}" class="py-2 px-4 text-gray-500 hover:text-gray-700">Create Event</a>
+                        <a href="{{ url_for('auth.logout') }}" class="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="py-2 px-4 text-gray-500 hover:text-gray-700">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="max-w-6xl mx-auto mt-4 px-4">
+                {% for message in messages %}
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto mt-6 px-4 pb-12">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 mt-auto">
+        <div class="max-w-6xl mx-auto text-center">
+            <p>&copy; 2025 Event Planner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const bgColorSelect = document.getElementById('bgColor');
+        
+        bgColorSelect.addEventListener('change', (event) => {
+            document.body.className = event.target.value + ' min-h-screen flex flex-col';
+        });
+    </script>
+</body>
+</html>

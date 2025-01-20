@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-semibold mb-4">Public Events</h1>
+    {% if not current_user.is_authenticated %}
+        <p class="text-gray-600 mb-4">
+            <a href="{{ url_for('auth.register') }}" class="text-blue-500 hover:underline">Register</a> or 
+            <a href="{{ url_for('auth.login') }}" class="text-blue-500 hover:underline">login</a> to create your own events!
+        </p>
+    {% endif %}
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for event in events %}
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-2">{{ event.title }}</h2>
+        <p class="text-gray-600 mb-4">{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
+        <div class="mb-4">
+            <div class="flex items-center text-gray-500 mb-2">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{{ event.date.strftime('%B %d, %Y') }}</span>
+            </div>
+            <div class="flex items-center text-gray-500">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{{ event.location }}</span>
+            </div>
+        </div>
+        <div class="flex justify-end">
+            <a href="{{ url_for('events.view_event', event_id=event.id) }}" 
+               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-span-full text-center text-gray-500 py-8">
+        No public events available at the moment.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
