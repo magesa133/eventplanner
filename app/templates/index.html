@@ -24,6 +24,37 @@
         .float-element {
             animation: floatAnimation 3s ease-in-out infinite;
         }
+
+
+    /* Slow spin for the icon */
+    .animate-spin-slow {
+        animation: spin 2s linear infinite;
+    }
+
+    /* Bounce animation */
+    .animate-bounce-up-down {
+        animation: bounceUpDown 1.5s infinite ease-in-out;
+    }
+
+    /* Keyframes for bounce animation */
+    @keyframes bounceUpDown {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Keyframes for slow spin */
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -42,7 +73,7 @@
                 
                 <div class="flex items-center space-x-6">
                     <div class="relative">
-                        <select id="bgColor" class="appearance-none bg-gray-50 border border-gray-300 rounded-lg py-2 px-4 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="bgColor" class=" g-blue-100 border border-gray-300 rounded-lg py-2 px-4 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="bg-gray-100">Theme</option>
                             <option value="bg-blue-100">Ocean</option>
                             <option value="bg-green-100">Forest</option>
@@ -68,6 +99,7 @@
             </div>
         </div>
     </nav>
+        {% block content %}
 
     <!-- Main Content -->
     <main class="flex-grow">
@@ -152,7 +184,36 @@
                 </div>
             </div>
         </section>
+
     </main>
+    <!-- Floating Surprise Button -->
+<div class="fixed bottom-4 right-4">
+    <button 
+        id="surpriseButton" 
+        class="bg-yellow-400 text-white p-4 rounded-full shadow-lg hover:bg-yellow-500 transition transform hover:scale-110 animate-pulse flex items-center justify-center space-x-2 animate-bounce-up-down"
+        style="box-shadow: 0px 0px 20px 5px rgba(0, 100, 120, 0.8);"
+        onclick="triggerSurprise()"
+    >
+        <svg 
+            class="w-6 h-6 animate-spin-slow" 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+        >
+            <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width="2" 
+                d="M12 8c-1.104.001-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-1.999-2-2zm0 10c-1.104.001-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-6-6c-1.104.001-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-1.999-2-2zm12 0c-1.104.001-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-1.999-2-2z"
+            />
+        </svg>
+        <span class="font-semibold text-lg"><a href="{{ url_for('auth.login') }}">Create</a></span>
+    </button>
+</div>
+
+
+       {% endblock %}
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
@@ -309,6 +370,11 @@
                 }
             });
         };
+
+        //for create animation button
+        // function triggerSurprise() {
+        //     alert("Surprise! 🎉 You discovered a hidden feature.");
+        //     }
 
         window.addEventListener('scroll', debounce(animateOnScroll, 50));
         animateOnScroll();
