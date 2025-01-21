@@ -15,7 +15,8 @@ bp = Blueprint('events', __name__)
 @bp.route('/')
 def index():
     public_events = Event.query.filter_by(is_public=True).all()
-    return render_template('events/index.html', events=public_events)
+    return render_template('index.html', events=public_events)
+
 
 @bp.route('/dashboard')
 @login_required
